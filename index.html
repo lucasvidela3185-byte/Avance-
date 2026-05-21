@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)file:///C:/Users/lucas/Downloads/foil_club_compartida.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Foil Club">
+<meta name="theme-color" content="#0a1628">
+<title>Foil Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./Seguimiento alumnos_files/css2" rel="stylesheet">
+<style>
+:root {
+  --ocean: #0a1628;
+  --deep: #0d1f3c;
+  --surface: #142240;
+  --card: #1a2d52;
+  --border: rgba(255,255,255,0.08);
+  --accent: #00d4ff;
+  --accent2: #0099cc;
+  --palo: #00d4ff;
+  --palo-bg: rgba(0,212,255,0.1);
+  --manillar: #00e5a0;
+  --manillar-bg: rgba(0,229,160,0.1);
+  --wing: #a78bfa;
+  --wing-bg: rgba(167,139,250,0.1);
+  --text: #f0f4ff;
+  --muted: rgba(240,244,255,0.5);
+  --done: #00e5a0;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; background: var(--ocean); }
+body { font-family: 'DM Sans', sans-serif; color: var(--text); }
+
+/* ── SCREENS ── */
+.screen { display: none; flex-direction: column; height: 100vh; overflow: hidden; }
+.screen.active { display: flex; }
+
+/* ── TOP BAR ── */
+.topbar {
+  padding: calc(var(--safe-top) + 14px) 20px 14px;
+  background: var(--ocean);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+}
+.topbar-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; flex: 1; }
+.back-btn {
+  width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--card); color: var(--text); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--card); color: var(--accent); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+/* ── SCROLLABLE CONTENT ── */
+.scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px; }
+
+/* ── HOME SCREEN ── */
+.home-hero {
+  background: linear-gradient(135deg, var(--surface) 0%, var(--deep) 100%);
+  border: 1px solid var(--border); border-radius: 20px;
+  padding: 24px 20px; margin-bottom: 20px; position: relative; overflow: hidden;
+}
+.home-hero::before {
+  content: '🌊';
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  font-size: 64px; opacity: 0.15;
+}
+.home-hero h1 { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; line-height: 1.1; margin-bottom: 6px; }
+.home-hero h1 span { color: var(--accent); }
+.home-hero p { font-size: 14px; color: var(--muted); }
+
+.section-label {
+  font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 10px; margin-top: 4px;
+}
+
+.search-box {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 12px 16px; font-size: 15px; color: var(--text); width: 100%;
+  margin-bottom: 16px; font-family: 'DM Sans', sans-serif; outline: none;
+}
+.search-box::placeholder { color: var(--muted); }
+.search-box:focus { border-color: rgba(0,212,255,0.4); }
+
+.student-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 14px 16px; margin-bottom: 10px; cursor: pointer; display: flex;
+  align-items: center; gap: 14px; transition: transform 0.1s, border-color 0.15s;
+  active: none;
+}
+.student-card:active { transform: scale(0.98); border-color: rgba(0,212,255,0.3); }
+.avatar {
+  width: 44px; height: 44px; border-radius: 14px; background: var(--surface);
+  border: 1px solid var(--border); display: flex; align-items: center;
+  justify-content: center; font-family: 'Syne', sans-serif; font-size: 15px;
+  font-weight: 700; color: var(--accent); flex-shrink: 0;
+}
+.card-info { flex: 1; min-width: 0; }
+.card-name { font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px; }
+.mini-bars { display: flex; gap: 4px; }
+.mini-bar-wrap { flex: 1; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+.mini-bar { height: 100%; border-radius: 2px; transition: width 0.3s; }
+.mb-palo { background: var(--palo); }
+.mb-man { background: var(--manillar); }
+.mb-wing { background: var(--wing); }
+.card-pct { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--accent); }
+
+.add-fab {
+  position: fixed; bottom: calc(var(--safe-bottom) + 20px); right: 20px;
+  width: 56px; height: 56px; border-radius: 18px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: var(--ocean); font-size: 26px; font-weight: 300;
+  border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(0,212,255,0.35);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.add-fab:active { transform: scale(0.92); box-shadow: 0 2px 10px rgba(0,212,255,0.2); }
+
+/* ── STUDENT DETAIL ── */
+.student-hero {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+  padding: 20px; margin-bottom: 16px;
+}
+.student-hero-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.big-avatar {
+  width: 56px; height: 56px; border-radius: 16px; background: var(--card);
+  border: 1px solid var(--border); display: flex; align-items: center;
+  justify-content: center; font-family: 'Syne', sans-serif; font-size: 18px;
+  font-weight: 800; color: var(--accent); flex-shrink: 0;
+}
+.hero-name { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; line-height: 1.2; }
+.hero-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+.stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.stat-chip {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 10px 8px; text-align: center;
+}
+.stat-val { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
+.stat-lbl { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.disc-section {
+  background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+  margin-bottom: 14px; overflow: hidden;
+}
+.disc-hdr {
+  padding: 14px 16px; display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid var(--border); cursor: pointer;
+}
+.disc-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.disc-hdr-info { flex: 1; }
+.disc-hdr-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+.disc-hdr-sub { font-size: 12px; color: var(--muted); }
+.disc-pct { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+.disc-chevron { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+.disc-chevron.open { transform: rotate(180deg); }
+
+.disc-prog { height: 3px; margin: 0 16px 0; background: rgba(255,255,255,0.07); border-radius: 2px; }
+.disc-prog-fill { height: 100%; border-radius: 2px; transition: width 0.4s; }
+
+.levels-list { padding: 8px 12px 12px; }
+.level-row {
+  display: flex; align-items: center; gap: 12px; padding: 11px 10px;
+  border-radius: 12px; cursor: pointer; transition: background 0.1s;
+  margin-bottom: 2px;
+}
+.level-row:active { background: rgba(255,255,255,0.05); }
+.level-row.done { background: rgba(0,229,160,0.06); }
+.level-check {
+  width: 26px; height: 26px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  font-size: 13px; transition: all 0.15s;
+}
+.level-row.done .level-check { background: var(--done); border-color: var(--done); color: var(--ocean); font-weight: 700; }
+.level-code { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; color: var(--muted); flex-shrink: 0; width: 28px; }
+.level-text { font-size: 13px; line-height: 1.35; flex: 1; }
+.level-row.done .level-text { color: var(--done); }
+
+.notes-section {
+  background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+  padding: 16px; margin-bottom: 14px;
+}
+.notes-label { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.notes-ta {
+  width: 100%; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px; color: var(--text); font-family: 'DM Sans', sans-serif;
+  font-size: 14px; resize: none; outline: none; min-height: 80px; line-height: 1.5;
+}
+.notes-ta:focus { border-color: rgba(0,212,255,0.35); }
+.notes-ta::placeholder { color: var(--muted); }
+
+.delete-btn {
+  width: 100%; padding: 14px; border-radius: 14px; border: 1px solid rgba(255,80,80,0.3);
+  background: rgba(255,80,80,0.05); color: #ff6060; font-family: 'DM Sans', sans-serif;
+  font-size: 14px; cursor: pointer; margin-bottom: 80px; transition: background 0.15s;
+}
+.delete-btn:active { background: rgba(255,80,80,0.12); }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  z-index: 200; align-items: flex-end; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+.modal-sheet {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 24px 24px 0 0; padding: 24px 20px calc(var(--safe-bottom) + 24px);
+  width: 100%; max-width: 500px;
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+.modal-input {
+  width: 100%; background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 16px; color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 16px; outline: none; margin-bottom: 14px;
+}
+.modal-input:focus { border-color: rgba(0,212,255,0.4); }
+.modal-input::placeholder { color: var(--muted); }
+.modal-btns { display: flex; gap: 10px; }
+.btn-cancel {
+  flex: 1; padding: 14px; border-radius: 14px; border: 1px solid var(--border);
+  background: var(--card); color: var(--muted); font-family: 'DM Sans', sans-serif;
+  font-size: 15px; cursor: pointer;
+}
+.btn-confirm {
+  flex: 2; padding: 14px; border-radius: 14px; border: none;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: var(--ocean); font-family: 'Syne', sans-serif; font-size: 15px;
+  font-weight: 700; cursor: pointer; transition: opacity 0.15s;
+}
+.btn-confirm:active { opacity: 0.85; }
+
+/* ── CONFIG SCREEN ── */
+.config-section {
+  background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+  margin-bottom: 14px; overflow: hidden;
+}
+.config-hdr {
+  padding: 14px 16px; font-family: 'Syne', sans-serif; font-size: 13px;
+  font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); border-bottom: 1px solid var(--border);
+}
+.config-row {
+  display: flex; align-items: center; padding: 13px 16px;
+  border-bottom: 1px solid var(--border); gap: 12px;
+}
+.config-row:last-child { border-bottom: none; }
+.config-row-text { flex: 1; font-size: 14px; }
+.config-row-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.config-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.edit-step-btn {
+  padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--accent); font-size: 12px;
+  font-family: 'Syne', sans-serif; font-weight: 700; cursor: pointer;
+}
+.add-step-row {
+  display: flex; align-items: center; padding: 12px 16px; gap: 10px; cursor: pointer;
+  color: var(--accent); font-size: 14px;
+}
+.add-step-row:active { background: rgba(0,212,255,0.05); }
+
+/* ── EMPTY ── */
+.empty-list { text-align: center; padding: 48px 20px; color: var(--muted); }
+.empty-list p { font-size: 15px; margin-top: 8px; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: calc(var(--safe-bottom) + 90px); left: 50%; transform: translateX(-50%);
+  background: var(--done); color: var(--ocean); font-family: 'Syne', sans-serif;
+  font-size: 13px; font-weight: 700; padding: 10px 20px; border-radius: 100px;
+  opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; z-index: 300;
+}
+.toast.show { opacity: 1; }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  display: flex; background: var(--deep); border-top: 1px solid var(--border);
+  padding: 8px 0 calc(var(--safe-bottom) + 8px); flex-shrink: 0;
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  gap: 4px; cursor: pointer; padding: 6px 0; color: var(--muted); transition: color 0.15s;
+}
+.nav-item.active { color: var(--accent); }
+.nav-icon { font-size: 22px; }
+.nav-label { font-size: 10px; font-family: 'Syne', sans-serif; font-weight: 700; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="screen active" id="screen-home">
+  <div class="topbar">
+    <span class="topbar-title">🏄 Foil Club</span>
+    <button class="icon-btn" onclick="goConfig()" title="Configuración">⚙️</button>
+  </div>
+  <div class="scroll-area">
+    <div class="home-hero">
+      <h1>Tu escuela,<br><span>bajo control</span></h1>
+      <p id="hero-sub">57 alumnos · promedio 35% completado</p>
+    </div>
+    <input class="search-box" type="text" placeholder="🔍  Buscar alumno..." id="search-input" oninput="renderStudentList()">
+    <div class="section-label">Alumnos</div>
+    <div id="student-list">
+      <div class="student-card" onclick="openStudent(1)">
+        <div class="avatar">AT</div>
+        <div class="card-info">
+          <div class="card-name">Abril Topp Knudsen</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:86%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">44%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(2)">
+        <div class="avatar">AS</div>
+        <div class="card-info">
+          <div class="card-name">Alfredo Sainz</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:71%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">40%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(3)">
+        <div class="avatar">AL</div>
+        <div class="card-info">
+          <div class="card-name">Alvaro</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:43%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">32%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(4)">
+        <div class="avatar">BB</div>
+        <div class="card-info">
+          <div class="card-name">Benjamín Bogo</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:71%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">40%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(5)">
+        <div class="avatar">DO</div>
+        <div class="card-info">
+          <div class="card-name">Dante Oricchio</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:71%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">92%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(6)">
+        <div class="avatar">ER</div>
+        <div class="card-info">
+          <div class="card-name">Edgar Rosenblatt</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:80%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">16%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(7)">
+        <div class="avatar">EI</div>
+        <div class="card-info">
+          <div class="card-name">Eduardo Iglesias</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:80%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">16%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(8)">
+        <div class="avatar">ER</div>
+        <div class="card-info">
+          <div class="card-name">Eduardo Raffy</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:40%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:86%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">84%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(9)">
+        <div class="avatar">EL</div>
+        <div class="card-info">
+          <div class="card-name">Eleonora</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:85%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">44%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(56)">
+        <div class="avatar">EL</div>
+        <div class="card-info">
+          <div class="card-name">Eliseo</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:86%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">44%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(10)">
+        <div class="avatar">ES</div>
+        <div class="card-info">
+          <div class="card-name">Enrique Seguí</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:71%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">40%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(11)">
+        <div class="avatar">EB</div>
+        <div class="card-info">
+          <div class="card-name">Eugenio Balbuena</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:86%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">24%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(12)">
+        <div class="avatar">EC</div>
+        <div class="card-info">
+          <div class="card-name">Ezequiel Camps</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:92%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">48%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(13)">
+        <div class="avatar">F(</div>
+        <div class="card-info">
+          <div class="card-name">Facu (con Marce)</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:46%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">24%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(14)">
+        <div class="avatar">FD</div>
+        <div class="card-info">
+          <div class="card-name">Federico Daniel Dowd</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:62%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">80%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(15)">
+        <div class="avatar">FG</div>
+        <div class="card-info">
+          <div class="card-name">Federico Gastaldi Bo</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:92%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">76%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(16)">
+        <div class="avatar">FP</div>
+        <div class="card-info">
+          <div class="card-name">Federico Piñeiro Pearson</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">0%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(17)">
+        <div class="avatar">FP</div>
+        <div class="card-info">
+          <div class="card-name">Felipe Pochat</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:57%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">16%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(18)">
+        <div class="avatar">FO</div>
+        <div class="card-info">
+          <div class="card-name">Fernando Olivera Videla</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">20%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(19)">
+        <div class="avatar">FS</div>
+        <div class="card-info">
+          <div class="card-name">Fernando Saenz</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">0%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(20)">
+        <div class="avatar">GL</div>
+        <div class="card-info">
+          <div class="card-name">Gabriela Landi</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:60%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">12%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(21)">
+        <div class="avatar">GA</div>
+        <div class="card-info">
+          <div class="card-name">Gastón Adrian Porier</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:80%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">16%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(22)">
+        <div class="avatar">GL</div>
+        <div class="card-info">
+          <div class="card-name">Germán Luis Ryske</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:86%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:77%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">84%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(23)">
+        <div class="avatar">GC</div>
+        <div class="card-info">
+          <div class="card-name">Griselda Calgaro</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:80%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:43%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:46%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">52%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(24)">
+        <div class="avatar">GS</div>
+        <div class="card-info">
+          <div class="card-name">Guillermo Schulte</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:57%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">36%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(54)">
+        <div class="avatar">GM</div>
+        <div class="card-info">
+          <div class="card-name">Gustavo Manuel Albornoz</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:43%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">32%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(25)">
+        <div class="avatar">IA</div>
+        <div class="card-info">
+          <div class="card-name">Ignacio Agustín Stocco</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">0%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(26)">
+        <div class="avatar">IW</div>
+        <div class="card-info">
+          <div class="card-name">Isabela Woodyatt</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:57%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">16%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(53)">
+        <div class="avatar">JA</div>
+        <div class="card-info">
+          <div class="card-name">James</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">20%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(27)">
+        <div class="avatar">JB</div>
+        <div class="card-info">
+          <div class="card-name">Joaquín Balbuena</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:57%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">16%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(28)">
+        <div class="avatar">JS</div>
+        <div class="card-info">
+          <div class="card-name">Joaquín Schulte</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:43%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">32%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(50)">
+        <div class="avatar">JM</div>
+        <div class="card-info">
+          <div class="card-name">Juan Manuel Berzero</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">52%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(29)">
+        <div class="avatar">JM</div>
+        <div class="card-info">
+          <div class="card-name">Juan Manuel Díaz</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">0%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(30)">
+        <div class="avatar">JM</div>
+        <div class="card-info">
+          <div class="card-name">Juan Martín García Toledo</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:86%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">44%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(31)">
+        <div class="avatar">JP</div>
+        <div class="card-info">
+          <div class="card-name">Juan Pablo</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:71%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">20%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(32)">
+        <div class="avatar">JC</div>
+        <div class="card-info">
+          <div class="card-name">Julio César Silva</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:71%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:77%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">60%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(33)">
+        <div class="avatar">LW</div>
+        <div class="card-info">
+          <div class="card-name">Lucas Woodyat</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:71%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">20%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(34)">
+        <div class="avatar">LT</div>
+        <div class="card-info">
+          <div class="card-name">Luciano Trani</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">52%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(35)">
+        <div class="avatar">LP</div>
+        <div class="card-info">
+          <div class="card-name">Luz Palau</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:71%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">40%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(36)">
+        <div class="avatar">MF</div>
+        <div class="card-info">
+          <div class="card-name">Malena Furman</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">0%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(37)">
+        <div class="avatar">M(</div>
+        <div class="card-info">
+          <div class="card-name">Marcelo (con Facu)</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:46%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">44%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(55)">
+        <div class="avatar">MM</div>
+        <div class="card-info">
+          <div class="card-name">Marcos Macera</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">20%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(38)">
+        <div class="avatar">MS</div>
+        <div class="card-info">
+          <div class="card-name">Mariano Scheinsohn</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:80%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">16%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(39)">
+        <div class="avatar">MB</div>
+        <div class="card-info">
+          <div class="card-name">Martín Bruder</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:71%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:85%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">64%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(40)">
+        <div class="avatar">MD</div>
+        <div class="card-info">
+          <div class="card-name">Matías Dekleva</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:29%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">28%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(41)">
+        <div class="avatar">ML</div>
+        <div class="card-info">
+          <div class="card-name">Melisa Lagemann</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:62%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">80%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(42)">
+        <div class="avatar">NC</div>
+        <div class="card-info">
+          <div class="card-name">Natalia Cambareri</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:86%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">44%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(43)">
+        <div class="avatar">NC</div>
+        <div class="card-info">
+          <div class="card-name">Nicolás Cejas</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">52%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(57)">
+        <div class="avatar">PM</div>
+        <div class="card-info">
+          <div class="card-name">Pablo Majdalani</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">20%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(44)">
+        <div class="avatar">PO</div>
+        <div class="card-info">
+          <div class="card-name">Pablo Otheguy</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:43%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">32%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(45)">
+        <div class="avatar">PL</div>
+        <div class="card-info">
+          <div class="card-name">Paula Lugo</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:80%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:14%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">20%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(46)">
+        <div class="avatar">PD</div>
+        <div class="card-info">
+          <div class="card-name">Pipe Dekleva</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:80%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:43%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">28%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(52)">
+        <div class="avatar">RF</div>
+        <div class="card-info">
+          <div class="card-name">Ramón Frene</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:57%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">16%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(47)">
+        <div class="avatar">RM</div>
+        <div class="card-info">
+          <div class="card-name">Rodrigo Meyer</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:86%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:46%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">68%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(48)">
+        <div class="avatar">RG</div>
+        <div class="card-info">
+          <div class="card-name">Rosario González</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:29%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">28%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(51)">
+        <div class="avatar">SM</div>
+        <div class="card-info">
+          <div class="card-name">Santiago Murtagh</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:29%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">28%</div>
+      </div>
+      <div class="student-card" onclick="openStudent(49)">
+        <div class="avatar">XH</div>
+        <div class="card-info">
+          <div class="card-name">Ximena Herrera Cousinet</div>
+          <div class="mini-bars"><div class="mini-bar-wrap"><div class="mini-bar" style="width:100%;background:#00d4ff"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:43%;background:#00e5a0"></div></div><div class="mini-bar-wrap"><div class="mini-bar" style="width:0%;background:#a78bfa"></div></div></div>
+        </div>
+        <div class="card-pct">32%</div>
+      </div></div>
+    <div style="height:80px"></div>
+  </div>
+  <button class="add-fab" onclick="showAddStudent()">+</button>
+</div>
+
+<!-- STUDENT DETAIL -->
+<div class="screen" id="screen-detail">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <span class="topbar-title" id="detail-title">Alumno</span>
+  </div>
+  <div class="scroll-area" id="detail-content"></div>
+</div>
+
+<!-- CONFIG -->
+<div class="screen" id="screen-config">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <span class="topbar-title">Configuración</span>
+  </div>
+  <div class="scroll-area">
+    <div class="section-label" style="margin-top:4px">Disciplinas y pasos</div>
+    <div id="config-content"></div>
+    <div class="section-label" style="margin-top:8px">Datos</div>
+    <div class="config-section">
+      <div class="config-row" onclick="exportData()" style="cursor:pointer">
+        <span style="font-size:20px">📤</span>
+        <div class="config-row-text">
+          <div>Exportar datos</div>
+          <div class="config-row-sub">Copia el JSON para hacer backup</div>
+        </div>
+      </div>
+      <div class="config-row" onclick="importData()" style="cursor:pointer">
+        <span style="font-size:20px">📥</span>
+        <div class="config-row-text">
+          <div>Importar datos</div>
+          <div class="config-row-sub">Restaurar desde un backup</div>
+        </div>
+      </div>
+    </div>
+    <div style="height:40px"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal-sheet">
+    <div class="modal-title" id="modal-title">Agregar</div>
+    <input class="modal-input" type="text" id="modal-input" placeholder="">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-confirm" id="modal-confirm" onclick="modalConfirm()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const DEFAULT_DISCIPLINES = [
+  {
+    id:"palo", name:"Wake con Palo", color:"#00d4ff",
+    levels:[
+      "Arrodillado sin foilear",
+      "Arrodillado foileo",
+      "Parado sin foilear",
+      "Parado levanto la tabla",
+      "Control abajo arriba foileando"
+    ]
+  },
+  {
+    id:"manillar", name:"Wake con Manillar", color:"#00e5a0",
+    levels:[
+      "Arrodillado, giro para ambos lados, sin foilear",
+      "Arrodillado, me abro para el back y foileo",
+      "Arrodillado, me abro para el back y foileo controlado",
+      "Parado, primeros vuelos inestable",
+      "Parado, foileo controlado por un tiempo",
+      "Subo y bajo el foil a gusto",
+      "Me alejo y acerco a la ola"
+    ]
+  },
+  {
+    id:"wingfoil", name:"Wingfoil", color:"#a78bfa",
+    levels:[
+      "Reconocimiento de la dirección del viento",
+      "Pronóstico, intensidad y dirección de vientos navegables",
+      "Identificar la vela y sus diferentes manijas",
+      "Reglas de prioridad con otros navegantes o barcos (seguridad)",
+      "Dirección de navegación respecto del viento",
+      "Navego arrodillado sin orzar",
+      "Navego arrodillado orzo y derivo",
+      "Navego con pie delantero",
+      "Navego parado sin orzar",
+      "Navego parado orzo y derivo",
+      "Primeros despegues parado",
+      "Primeros vuelos cortos sin estabilidad",
+      "Estabilidad volando parado"
+    ]
+  }
+];
+
+const DEFAULT_STUDENTS = [
+  {id:1,name:"Abril Topp Knudsen",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,1,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:2,name:"Alfredo Sainz",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:3,name:"Alvaro",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:4,name:"Benjamín Bogo",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:5,name:"Dante Oricchio",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,0,0],wingfoil:[1,1,1,1,1,1,1,1,1,1,1,1,1]},notes:""},
+  {id:6,name:"Edgar Rosenblatt",progress:{palo:[1,1,1,1,0],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:7,name:"Eduardo Iglesias",progress:{palo:[1,1,1,1,0],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:8,name:"Eduardo Raffy",progress:{palo:[0,0,0,1,1],manillar:[1,1,1,1,1,1,0],wingfoil:[1,1,1,1,1,1,1,1,1,1,1,1,1]},notes:""},
+  {id:9,name:"Eleonora",progress:{palo:[0,0,0,0,0],manillar:[0,0,0,0,0,0,0],wingfoil:[1,1,0,1,1,1,1,1,1,1,1,1,0]},notes:""},
+  {id:10,name:"Enrique Seguí",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:11,name:"Eugenio Balbuena",progress:{palo:[0,0,0,0,0],manillar:[1,1,1,1,1,1,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:12,name:"Ezequiel Camps",progress:{palo:[0,0,0,0,0],manillar:[0,0,0,0,0,0,0],wingfoil:[1,1,1,1,1,1,1,1,1,1,1,1,0]},notes:""},
+  {id:13,name:"Facu (con Marce)",progress:{palo:[0,0,0,0,0],manillar:[0,0,0,0,0,0,0],wingfoil:[1,0,1,0,1,1,1,1,0,0,0,0,0]},notes:""},
+  {id:14,name:"Federico Daniel Dowd",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,1,1],wingfoil:[1,0,1,0,1,1,1,1,1,1,0,0,0]},notes:""},
+  {id:15,name:"Federico Gastaldi Bo",progress:{palo:[0,0,0,0,0],manillar:[1,1,1,1,1,1,1],wingfoil:[1,1,1,0,1,1,1,1,1,1,1,1,1]},notes:""},
+  {id:16,name:"Federico Piñeiro Pearson",progress:{palo:[0,0,0,0,0],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:17,name:"Felipe Pochat",progress:{palo:[0,0,0,0,0],manillar:[1,1,1,1,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:18,name:"Fernando Olivera Videla",progress:{palo:[1,1,1,1,1],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:19,name:"Fernando Saenz",progress:{palo:[0,0,0,0,0],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:20,name:"Gabriela Landi",progress:{palo:[1,1,1,0,0],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:21,name:"Gastón Adrian Porier",progress:{palo:[1,1,1,1,0],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:22,name:"Germán Luis Ryske",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,0,1],wingfoil:[1,1,1,1,1,1,1,1,1,1,0,0,0]},notes:""},
+  {id:23,name:"Griselda Calgaro",progress:{palo:[1,1,1,1,0],manillar:[1,1,1,0,0,0,0],wingfoil:[1,1,1,1,1,1,0,0,0,0,0,0,0]},notes:""},
+  {id:24,name:"Guillermo Schulte",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:25,name:"Ignacio Agustín Stocco",progress:{palo:[0,0,0,0,0],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:26,name:"Isabela Woodyatt",progress:{palo:[0,0,0,0,0],manillar:[1,1,1,1,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:27,name:"Joaquín Balbuena",progress:{palo:[0,0,0,0,0],manillar:[1,1,1,1,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:28,name:"Joaquín Schulte",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:29,name:"Juan Manuel Díaz",progress:{palo:[0,0,0,0,0],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:30,name:"Juan Martín García Toledo",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,1,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:31,name:"Juan Pablo",progress:{palo:[0,0,0,0,0],manillar:[1,1,1,1,1,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:32,name:"Julio César Silva",progress:{palo:[0,0,0,0,0],manillar:[1,1,1,1,1,0,0],wingfoil:[1,0,1,0,1,1,1,1,1,1,1,1,0]},notes:""},
+  {id:33,name:"Lucas Woodyat",progress:{palo:[0,0,0,0,0],manillar:[1,1,1,1,1,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:34,name:"Luciano Trani",progress:{palo:[0,0,0,0,0],manillar:[0,0,0,0,0,0,0],wingfoil:[1,1,1,1,1,1,1,1,1,1,1,1,1]},notes:""},
+  {id:35,name:"Luz Palau",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:36,name:"Malena Furman",progress:{palo:[0,0,0,0,0],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:37,name:"Marcelo (con Facu)",progress:{palo:[1,1,1,1,1],manillar:[0,0,0,0,0,0,0],wingfoil:[1,0,1,0,1,1,1,1,0,0,0,0,0]},notes:""},
+  {id:38,name:"Mariano Scheinsohn",progress:{palo:[1,1,1,1,0],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:39,name:"Martín Bruder",progress:{palo:[0,0,0,0,0],manillar:[1,1,1,1,1,0,0],wingfoil:[1,0,1,0,1,1,1,1,1,1,1,1,1]},notes:""},
+  {id:40,name:"Matías Dekleva",progress:{palo:[1,1,1,1,1],manillar:[1,1,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:41,name:"Melisa Lagemann",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,1,1],wingfoil:[1,1,1,0,1,1,1,1,1,0,0,0,0]},notes:""},
+  {id:42,name:"Natalia Cambareri",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,1,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:43,name:"Nicolás Cejas",progress:{palo:[0,0,0,0,0],manillar:[0,0,0,0,0,0,0],wingfoil:[1,1,1,1,1,1,1,1,1,1,1,1,1]},notes:""},
+  {id:44,name:"Pablo Otheguy",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:45,name:"Paula Lugo",progress:{palo:[1,1,1,1,0],manillar:[0,0,0,0,1,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:46,name:"Pipe Dekleva",progress:{palo:[1,1,1,1,0],manillar:[1,1,1,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:47,name:"Rodrigo Meyer",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,1,0],wingfoil:[1,1,1,0,1,1,1,0,0,0,0,0,0]},notes:""},
+  {id:48,name:"Rosario González",progress:{palo:[1,1,1,1,1],manillar:[1,1,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:49,name:"Ximena Herrera Cousinet",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:50,name:"Juan Manuel Berzero",progress:{palo:[0,0,0,0,0],manillar:[0,0,0,0,0,0,0],wingfoil:[1,1,1,1,1,1,1,1,1,1,1,1,1]},notes:""},
+  {id:51,name:"Santiago Murtagh",progress:{palo:[1,1,1,1,1],manillar:[1,1,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:52,name:"Ramón Frene",progress:{palo:[0,0,0,0,0],manillar:[1,1,1,1,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:53,name:"James",progress:{palo:[1,1,1,1,1],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:54,name:"Gustavo Manuel Albornoz",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:55,name:"Marcos Macera",progress:{palo:[1,1,1,1,1],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:56,name:"Eliseo",progress:{palo:[1,1,1,1,1],manillar:[1,1,1,1,1,1,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""},
+  {id:57,name:"Pablo Majdalani",progress:{palo:[1,1,1,1,1],manillar:[0,0,0,0,0,0,0],wingfoil:[0,0,0,0,0,0,0,0,0,0,0,0,0]},notes:""}
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let students = [], disciplines = [], activeStudentId = null;
+let modalAction = null, editTarget = null;
+
+function load() {
+  const sd = localStorage.getItem('fc_students');
+  const dd = localStorage.getItem('fc_disciplines');
+  students = sd ? JSON.parse(sd) : JSON.parse(JSON.stringify(DEFAULT_STUDENTS));
+  disciplines = dd ? JSON.parse(dd) : JSON.parse(JSON.stringify(DEFAULT_DISCIPLINES));
+  // ensure progress arrays match discipline lengths
+  students.forEach(s => {
+    disciplines.forEach(d => {
+      if (!s.progress[d.id]) s.progress[d.id] = [];
+      while (s.progress[d.id].length < d.levels.length) s.progress[d.id].push(0);
+    });
+  });
+}
+
+function save() {
+  syncWrite();
+  localStorage.setItem('fc_students', JSON.stringify(students));
+  localStorage.setItem('fc_disciplines', JSON.stringify(disciplines));
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────
+function initials(name) {
+  const p = name.trim().split(' ');
+  return p.length >= 2 ? (p[0][0]+p[1][0]).toUpperCase() : name.slice(0,2).toUpperCase();
+}
+function pct(arr) { return arr.length ? Math.round(arr.filter(Boolean).length/arr.length*100) : 0; }
+function overallPct(s) {
+  const all = disciplines.flatMap(d => s.progress[d.id]||[]);
+  return all.length ? Math.round(all.filter(Boolean).length/all.length*100) : 0;
+}
+function nextId() { return Date.now(); }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+}
+function goHome() { showScreen('home'); renderStudentList(); }
+function goConfig() { showScreen('config'); renderConfig(); }
+
+// ── HOME ──────────────────────────────────────────────────────────────────
+function renderStudentList() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const filtered = students.filter(s => s.name.toLowerCase().includes(q))
+    .sort((a,b) => a.name.localeCompare(b.name));
+
+  const total = students.length;
+  const avgPct = total ? Math.round(students.reduce((acc,s)=>acc+overallPct(s),0)/total) : 0;
+  document.getElementById('hero-sub').textContent =
+    `${total} alumnos · promedio ${avgPct}% completado`;
+
+  const el = document.getElementById('student-list');
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty-list"><div style="font-size:40px">🔍</div><p>Sin resultados</p></div>`;
+    return;
+  }
+  el.innerHTML = filtered.map(s => {
+    const op = overallPct(s);
+    const bars = disciplines.map(d => {
+      const p = pct(s.progress[d.id]||[]);
+      return `<div class="mini-bar-wrap"><div class="mini-bar" style="width:${p}%;background:${d.color}"></div></div>`;
+    }).join('');
+    return `
+      <div class="student-card" onclick="openStudent(${s.id})">
+        <div class="avatar">${initials(s.name)}</div>
+        <div class="card-info">
+          <div class="card-name">${s.name}</div>
+          <div class="mini-bars">${bars}</div>
+        </div>
+        <div class="card-pct">${op}%</div>
+      </div>`;
+  }).join('');
+}
+
+// ── STUDENT DETAIL ────────────────────────────────────────────────────────
+function openStudent(id) {
+  activeStudentId = id;
+  const s = students.find(x => x.id === id);
+  document.getElementById('detail-title').textContent = s.name;
+  renderDetail();
+  showScreen('detail');
+}
+
+function renderDetail() {
+  const s = students.find(x => x.id === activeStudentId);
+  if (!s) return;
+
+  const allDone = disciplines.reduce((acc,d) => acc+(s.progress[d.id]||[]).filter(Boolean).length, 0);
+  const allTotal = disciplines.reduce((acc,d) => acc+d.levels.length, 0);
+  const allPct = Math.round(allDone/allTotal*100);
+
+  const discHTML = disciplines.map(d => {
+    const vals = s.progress[d.id] || [];
+    const done = vals.filter(Boolean).length;
+    const total = d.levels.length;
+    const p = Math.round(done/total*100);
+    const levelsHTML = d.levels.map((lv,i) => `
+      <div class="level-row ${vals[i]?'done':''}" onclick="toggleLevel('${d.id}',${i})">
+        <div class="level-check">${vals[i]?'✓':''}</div>
+        <span class="level-code">${String.fromCharCode(65+i)}</span>
+        <span class="level-text">${lv}</span>
+      </div>`).join('');
+    return `
+      <div class="disc-section">
+        <div class="disc-hdr" onclick="toggleDisc(this)">
+          <div class="disc-dot" style="background:${d.color}"></div>
+          <div class="disc-hdr-info">
+            <div class="disc-hdr-name">${d.name}</div>
+            <div class="disc-hdr-sub">${done}/${total} niveles</div>
+          </div>
+          <div class="disc-pct" style="color:${d.color}">${p}%</div>
+          <div class="disc-chevron open">▼</div>
+        </div>
+        <div class="disc-prog"><div class="disc-prog-fill" style="width:${p}%;background:${d.color}"></div></div>
+        <div class="levels-list">${levelsHTML}</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('detail-content').innerHTML = `
+    <div class="student-hero">
+      <div class="student-hero-top">
+        <div class="big-avatar">${initials(s.name)}</div>
+        <div>
+          <div class="hero-name">${s.name}</div>
+          <div class="hero-sub">${allDone} de ${allTotal} niveles completados</div>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-chip"><div class="stat-val" style="color:var(--accent)">${allPct}%</div><div class="stat-lbl">General</div></div>
+        <div class="stat-chip"><div class="stat-val" style="color:var(--done)">${allDone}</div><div class="stat-lbl">Logrados</div></div>
+        <div class="stat-chip"><div class="stat-val" style="color:var(--muted)">${allTotal-allDone}</div><div class="stat-lbl">Pendientes</div></div>
+      </div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-label">📝 Notas</div>
+      <textarea class="notes-ta" placeholder="Observaciones, equipamiento, próximos objetivos..." oninput="saveNotes(this.value)">${s.notes||''}</textarea>
+    </div>
+    ${discHTML}
+    <button class="delete-btn" onclick="deleteStudent(${s.id})">🗑 Eliminar alumno</button>`;
+}
+
+function toggleDisc(hdr) {
+  const list = hdr.parentElement.querySelector('.levels-list');
+  const chev = hdr.querySelector('.disc-chevron');
+  const prog = hdr.parentElement.querySelector('.disc-prog');
+  const open = chev.classList.toggle('open');
+  list.style.display = open ? '' : 'none';
+  prog.style.display = open ? '' : 'none';
+}
+
+function toggleLevel(discId, idx) {
+  const s = students.find(x => x.id === activeStudentId);
+  s.progress[discId][idx] = s.progress[discId][idx] ? 0 : 1;
+  save();
+  renderDetail();
+  if (s.progress[discId][idx]) toast('✓ Nivel logrado!');
+}
+
+function saveNotes(val) {
+  const s = students.find(x => x.id === activeStudentId);
+  s.notes = val; save();
+}
+
+function deleteStudent(id) {
+  if (!confirm('¿Eliminar este alumno? No se puede deshacer.')) return;
+  students = students.filter(s => s.id !== id);
+  save(); goHome();
+}
+
+// ── CONFIG ────────────────────────────────────────────────────────────────
+function renderConfig() {
+  const html = disciplines.map((d,di) => {
+    const levelsHTML = d.levels.map((lv,li) => `
+      <div class="config-row">
+        <div class="config-dot" style="background:${d.color}"></div>
+        <div class="config-row-text">
+          <div>${String.fromCharCode(65+li)}. ${lv}</div>
+        </div>
+        <button class="edit-step-btn" onclick="editStep(${di},${li})">Editar</button>
+      </div>`).join('');
+    return `
+      <div class="config-section">
+        <div class="config-hdr" style="color:${d.color}">${d.name}</div>
+        ${levelsHTML}
+        <div class="add-step-row" onclick="addStep(${di})">
+          <span>+</span><span>Agregar paso</span>
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('config-content').innerHTML = html;
+}
+
+function editStep(di, li) {
+  editTarget = {di, li};
+  showModal('Editar paso', disciplines[di].levels[li], 'Guardar', () => {
+    const val = document.getElementById('modal-input').value.trim();
+    if (!val) return;
+    disciplines[editTarget.di].levels[editTarget.li] = val;
+    save(); closeModal(); renderConfig(); toast('Paso actualizado');
+  });
+}
+
+function addStep(di) {
+  editTarget = {di};
+  showModal('Nuevo paso', '', 'Agregar', () => {
+    const val = document.getElementById('modal-input').value.trim();
+    if (!val) return;
+    disciplines[editTarget.di].levels.push(val);
+    students.forEach(s => { if(s.progress[disciplines[editTarget.di].id]) s.progress[disciplines[editTarget.di].id].push(0); });
+    save(); closeModal(); renderConfig(); toast('Paso agregado');
+  });
+}
+
+// ── ADD STUDENT ───────────────────────────────────────────────────────────
+function showAddStudent() {
+  showModal('Nuevo alumno', '', 'Agregar', () => {
+    const name = document.getElementById('modal-input').value.trim();
+    if (!name) return;
+    const progress = {};
+    disciplines.forEach(d => { progress[d.id] = new Array(d.levels.length).fill(0); });
+    const newS = {id: nextId(), name, progress, notes:''};
+    students.push(newS);
+    save(); closeModal(); renderStudentList();
+    openStudent(newS.id);
+    toast('Alumno agregado 🎉');
+  });
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────
+function showModal(title, value, btnLabel, action) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-input').value = value;
+  document.getElementById('modal-input').placeholder = title;
+  document.getElementById('modal-confirm').textContent = btnLabel;
+  modalAction = action;
+  document.getElementById('modal').classList.add('open');
+  setTimeout(() => document.getElementById('modal-input').focus(), 300);
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); modalAction = null; }
+function modalConfirm() { if (modalAction) modalAction(); }
+function closeModalOutside(e) { if (e.target === document.getElementById('modal')) closeModal(); }
+
+// ── EXPORT / IMPORT ───────────────────────────────────────────────────────
+function exportData() {
+  const data = JSON.stringify({students, disciplines}, null, 2);
+  const blob = new Blob([data], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'foilclub_backup.json';
+  a.click();
+  toast('Backup descargado 📤');
+}
+
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const parsed = JSON.parse(ev.target.result);
+        if (parsed.students && parsed.disciplines) {
+          students = parsed.students;
+          disciplines = parsed.disciplines;
+          save(); renderStudentList(); toast('Datos importados ✓');
+        } else { alert('Archivo inválido'); }
+      } catch { alert('Error al leer el archivo'); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// ── GOOGLE SHEETS SYNC ───────────────────────────────────────────────────
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziH2o9ryq9todKAAB9sCwfbMc9OtxGfqkuk2Quf_nhcIe6VZ18kga8X5QcaFQ0rhC8/exec";
+let syncing = false;
+
+async function syncRead() {
+  try {
+    const res = await fetch(SCRIPT_URL + "?action=read");
+    const text = await res.text();
+    const remote = JSON.parse(text);
+    if (remote.students && remote.disciplines) {
+      students = remote.students;
+      disciplines = remote.disciplines;
+      localStorage.setItem("fc_students", JSON.stringify(students));
+      localStorage.setItem("fc_disciplines", JSON.stringify(disciplines));
+    }
+  } catch(e) { console.warn("Sin conexión, usando datos locales"); }
+}
+
+async function syncWrite() {
+  if (syncing) return;
+  syncing = true;
+  showSyncIndicator(true);
+  try {
+    const data = JSON.stringify({students, disciplines});
+    await fetch(SCRIPT_URL + "?action=write", {
+      method: "POST",
+      body: data,
+      headers: {"Content-Type": "application/json"}
+    });
+    showSyncIndicator(false, true);
+  } catch(e) {
+    showSyncIndicator(false, false);
+  }
+  syncing = false;
+}
+
+function showSyncIndicator(loading, success) {
+  let ind = document.getElementById("sync-ind");
+  if (!ind) { ind = document.createElement("div"); ind.id = "sync-ind"; document.body.appendChild(ind); }
+  ind.style.cssText = "position:fixed;top:calc(env(safe-area-inset-top,0px)+8px);right:14px;font-size:11px;font-family:Syne,sans-serif;font-weight:700;padding:4px 10px;border-radius:20px;z-index:500;transition:opacity 0.3s;";
+  if (loading) { ind.textContent = "⟳ Guardando..."; ind.style.background = "rgba(0,212,255,0.15)"; ind.style.color = "#00d4ff"; ind.style.opacity = "1"; }
+  else if (success) { ind.textContent = "✓ Sincronizado"; ind.style.background = "rgba(0,229,160,0.15)"; ind.style.color = "#00e5a0"; ind.style.opacity = "1"; setTimeout(()=>{ ind.style.opacity="0"; },2000); }
+  else { ind.textContent = "⚠ Sin conexión"; ind.style.background = "rgba(255,100,100,0.15)"; ind.style.color = "#ff6060"; ind.style.opacity = "1"; setTimeout(()=>{ ind.style.opacity="0"; },3000); }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+showSyncIndicator(true);
+syncRead().then(() => { load(); renderStudentList(); showSyncIndicator(false, true); });
+</script><div id="sync-ind" style="position: fixed; top: calc(env(safe-area-inset-top,0px)+8px); right: 14px; font-size: 11px; font-family: Syne, sans-serif; font-weight: 700; padding: 4px 10px; border-radius: 20px; z-index: 500; transition: opacity 0.3s; background: rgba(0, 229, 160, 0.15); color: rgb(0, 229, 160); opacity: 0;">✓ Sincronizado</div>
+
+
+</body></html>
